@@ -39,19 +39,18 @@ int main(){
     // Make a sequence of observations.
     std::vector<arma::mat> observations(5, arma::mat(2, 2500));
     std::vector<arma::Row<size_t> > states(5, arma::Row<size_t>(2500));
-    for (size_t obs = 0; obs < 5; obs++)
-    {
+    for (size_t obs = 0; obs < 5; obs++){
         states[obs][0] = 0;
         observations[obs].col(0) = gmms[0].Random();
 
-        for (size_t i = 1; i < 2500; i++)
-        {
+        for (size_t i = 1; i < 2500; i++){
             double randValue = (double) rand() / (double) RAND_MAX;
 
-            if (randValue <= transMat(0, states[obs][i - 1]))
+            if (randValue <= transMat(0, states[obs][i - 1])){
                 states[obs][i] = 0;
-            else
+            } else {
                 states[obs][i] = 1;
+            }
 
             observations[obs].col(i) = gmms[states[obs][i]].Random();
         }
