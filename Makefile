@@ -19,6 +19,9 @@ debug: debug_hmm
 
 all: release release_debug debug
 
+run: release_debug
+	./release_debug/bin/hmm
+
 clean: base_clean
 
 include make-utils/cpp-utils-finalize.mk
