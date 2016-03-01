@@ -7,8 +7,8 @@ include make-utils/cpp-utils.mk
 
 CXX_FLAGS += -pedantic
 
-CXX_FLAGS +=
-LD_FLAGS  +=
+CXX_FLAGS += -I/usr/include/armadillo_bits/
+LD_FLAGS  += -lmlpack -larmadillo -lboost_serialization -lboost_program_options
 
 $(eval $(call auto_folder_compile,src))
 $(eval $(call auto_add_executable,hmm))
