@@ -90,18 +90,46 @@ int main(){
         label = {0, 1, 1, 0, 0, 1, 1};
     }
 
+    {
+        images.emplace_back(n_features, 6);
+        labels.emplace_back(6);
+
+        labels.back() = labels[0];
+        images.back() = images[0] + 0.1;
+    }
+
+    {
+        images.emplace_back(n_features, 6);
+        labels.emplace_back(6);
+
+        labels.back() = labels[1];
+        images.back() = images[1] - 0.1;
+    }
+
     HMM<GMM> hmm(n_states, GMM(n_gaussians, n_features));
 
     // Train the HMM.
     hmm.Train(images, labels);
 
-    std::cout << hmm.LogLikelihood(images[0]) << std::endl;
-    std::cout << hmm.LogLikelihood(images[1]) << std::endl;
-    std::cout << hmm.LogLikelihood(images[2]) << std::endl;
+    for(auto& image : images){
+        std::cout << "From training: " << hmm.LogLikelihood(image) << std::endl;
+    }
+
+    {
+        arma::mat likely(n_features, 7);
+        likely = images[2] + 1.0;
+        std::cout << "Likely:" << hmm.LogLikelihood(likely) << std::endl;
+    }
+
+    {
+        arma::mat likely(n_features, 7);
+        likely = images[2] - 1.0;
+        std::cout << "Likely:" << hmm.LogLikelihood(likely) << std::endl;
+    }
 
     {
         arma::mat unlikely(n_features, 6);
         unlikely = images[0] * 2.0;
-        std::cout << hmm.LogLikelihood(unlikely) << std::endl;
+        std::cout << "Unlikely: " << hmm.LogLikelihood(unlikely) << std::endl;
     }
 }
