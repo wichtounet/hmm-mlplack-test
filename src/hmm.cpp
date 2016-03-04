@@ -34,8 +34,7 @@ int main(){
         image.col(1)[1] = 10;
         image.col(2)[0] = 23;
         image.col(2)[1] = 12;
-        image.col(3)[0] = 11;
-        image.col(3)[1] = 9;
+        image.col(3)[0] = 11; image.col(3)[1] = 9;
         image.col(4)[0] = 20;
         image.col(4)[1] = 8;
         image.col(5)[0] = 40;
@@ -131,5 +130,17 @@ int main(){
         arma::mat unlikely(n_features, 6);
         unlikely = images[0] * 2.0;
         std::cout << "Unlikely: " << hmm.LogLikelihood(unlikely) << std::endl;
+    }
+
+    //Test GMM directly (does not seem to be possible)
+
+    GMM gmm(n_gaussians, n_features);
+
+    for(auto& image : images){
+        gmm.Train(image, 1, true);
+    }
+
+    for(auto& image : images){
+        std::cout << "From training(gmm): " << gmm.Probability(image) << std::endl;
     }
 }
