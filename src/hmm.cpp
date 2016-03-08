@@ -136,6 +136,7 @@ int main(){
     for(auto& image : images){
         std::cout << "From training(hmm): " << hmm.LogLikelihood(image) << std::endl;
         std::cout << "From training(gmm): : " << likelihood(image) << std::endl;
+        std::cout << "From training(normal): : " << hmm.LogLikelihood(image) / likelihood(image) << std::endl;
     }
 
     {
@@ -143,6 +144,7 @@ int main(){
         likely = images[2] + 1.0;
         std::cout << "Likely(hmm):" << hmm.LogLikelihood(likely) << std::endl;
         std::cout << "Likely(gmm):" << likelihood(likely) << std::endl;
+        std::cout << "Likely(normal):" << hmm.LogLikelihood(likely) / likelihood(likely) << std::endl;
     }
 
     {
@@ -150,6 +152,7 @@ int main(){
         likely = images[2] - 1.0;
         std::cout << "Likely(hmm):" << hmm.LogLikelihood(likely) << std::endl;
         std::cout << "Likely(gmm):" << likelihood(likely) << std::endl;
+        std::cout << "Likely(normal):" << hmm.LogLikelihood(likely) / likelihood(likely) << std::endl;
     }
 
     {
@@ -157,5 +160,6 @@ int main(){
         unlikely = images[0] * 2.0;
         std::cout << "Unlikely(hmm):" << hmm.LogLikelihood(unlikely) << std::endl;
         std::cout << "Unlikely(gmm): : " << likelihood(unlikely) << std::endl;
+        std::cout << "Unlikely(normal):" << hmm.LogLikelihood(unlikely) / likelihood(unlikely) << std::endl;
     }
 }
