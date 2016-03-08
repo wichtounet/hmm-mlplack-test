@@ -105,34 +105,13 @@ int main(){
         images.back() = images[1] - 0.1;
     }
 
+    // Train a HMM.
+
     HMM<GMM> hmm(n_states, GMM(n_gaussians, n_features));
 
-    // Train the HMM.
     hmm.Train(images, labels);
 
-    for(auto& image : images){
-        std::cout << "From training(hmm): " << hmm.LogLikelihood(image) << std::endl;
-    }
-
-    {
-        arma::mat likely(n_features, 7);
-        likely = images[2] + 1.0;
-        std::cout << "Likely(hmm):" << hmm.LogLikelihood(likely) << std::endl;
-    }
-
-    {
-        arma::mat likely(n_features, 7);
-        likely = images[2] - 1.0;
-        std::cout << "Likely(hmm):" << hmm.LogLikelihood(likely) << std::endl;
-    }
-
-    {
-        arma::mat unlikely(n_features, 6);
-        unlikely = images[0] * 2.0;
-        std::cout << "Unlikely(hmm): " << hmm.LogLikelihood(unlikely) << std::endl;
-    }
-
-    //Test GMM directly (does not seem to be possible)
+    //Train a GMM directly
 
     GMM gmm(n_gaussians, n_features);
 
@@ -141,6 +120,8 @@ int main(){
     for(std::size_t i = 1; i < images.size(); ++i){
         gmm.Train(images[i], 1, true);
     }
+
+    // Some tests
 
     auto likelihood = [&gmm](auto& image){
         double likelihood = std::log(gmm.Probability(image.col(0)));
@@ -153,20 +134,28 @@ int main(){
     };
 
     for(auto& image : images){
-        for(std::size_t f = 0; f < image.n_cols; ++f){
-            std::cout << "From training(gmm): o(" << f << "): " << gmm.Probability(image.col(f)) << std::endl;
-        }
+        std::cout << "From training(hmm): " << hmm.LogLikelihood(image) << std::endl;
         std::cout << "From training(gmm): : " << likelihood(image) << std::endl;
+    }
+
+    {
+        arma::mat likely(n_features, 7);
+        likely = images[2] + 1.0;
+        std::cout << "Likely(hmm):" << hmm.LogLikelihood(likely) << std::endl;
+        std::cout << "Likely(gmm):" << likelihood(likely) << std::endl;
+    }
+
+    {
+        arma::mat likely(n_features, 7);
+        likely = images[2] - 1.0;
+        std::cout << "Likely(hmm):" << hmm.LogLikelihood(likely) << std::endl;
+        std::cout << "Likely(gmm):" << likelihood(likely) << std::endl;
     }
 
     {
         arma::mat unlikely(n_features, 6);
         unlikely = images[0] * 2.0;
-
-        for(std::size_t f = 0; f < unlikely.n_cols; ++f){
-            std::cout << "Unlikely(gmm): o(" << f << "): " << gmm.Probability(unlikely.col(f)) << std::endl;
-        }
-
+        std::cout << "Unlikely(hmm):" << hmm.LogLikelihood(unlikely) << std::endl;
         std::cout << "Unlikely(gmm): : " << likelihood(unlikely) << std::endl;
     }
 }
