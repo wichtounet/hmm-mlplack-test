@@ -136,8 +136,10 @@ int main(){
 
     GMM gmm(n_gaussians, n_features);
 
-    for(auto& image : images){
-        gmm.Train(image, 1, true);
+    gmm.Train(images[0]);
+
+    for(std::size_t i = 1; i < images.size(); ++i){
+        gmm.Train(images[i], 1, true);
     }
 
     for(auto& image : images){
